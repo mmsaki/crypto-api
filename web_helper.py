@@ -1,6 +1,12 @@
 from web3 import Web3
+from dotenv import load_dotenv
+import os
 
-node = 'https://mainnet.infura.io/v3/6f57c3aef2854bd482f67669efec3acd'
+load_dotenv()
+
+api_key = os.getenv("INFURA_KEY")
+
+node = 'https://mainnet.infura.io/v3/' + str(api_key)
 web3 = Web3(Web3.HTTPProvider(node))
 
 
