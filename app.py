@@ -1,38 +1,46 @@
-from flask import Flask, request, jsonify
-import web_helper
+import os
+from dotenv import load_dotenv
+from web3.middleware.cache import construct_simple_cache_middleware
+from flask import Flask, request, jsonify, render_template
+import connexion
+import web3_helper
+import utils
+from web3 import Web3
 
-
-app = Flask(__name__)
+app = connexion.App(__name__, specification_dir='./')
+app.add_api("swagger.yml")
 
 
 @app.route("/")
 def index():
-    return "River API"
+    return render_template("home.html")
 
 
-@app.route("/blocknumber")
-def block_number():
-    return jsonify({"blocknumber": web_helper.blocknumber()})
+# @app.route("/latestBlock")
+# def block_number():
+#     return jsonify({"Latest Block": web3_helper.latestBlock()})
 
 
-@app.route('/getBalance/<address>')
-def getBalance(address):
-    balance = web_helper.getBalance(address)
-    return jsonify({"balance": balance})
+# @app.route("/getBlock/<number>")
+# def getBlock(number):
+#     block_data = web3_helper.getBlock(number)
+#     parsed_hex = utils.JsonParseBlockData(block_data)
+#     return jsonify({"data": parsed_hex})
 
 
-@app.route('/tx/<hash>')
-def getTransaction(hash):
-    data = web_helper.getTansaction(hash)
-    tx_dict = dict(data)
+# @app.route('/getBalance/<address>')
+# def getBalance(address):
+#     balance = web3_helper.getBalance(address)
+#     return jsonify({"balance": balance})
 
-    # convert bytes instances to hexidecimal string representations
-    for k, v in tx_dict.items():
-        if isinstance(v, bytes):
-            tx_dict[k] = v.hex()
 
-    return jsonify({"tx": tx_dict})
+# @app.route('/tx/<hash>')
+# def getTransaction(hash):
+#     data = web3_helper.getTansaction(hash)
+#     hex_json = utils.JsonParserTransactionData(data)
+
+#     return jsonify({"tx": hex_json})
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8000)

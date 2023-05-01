@@ -2,7 +2,7 @@ import requests
 import json
 
 # Block number
-blocknumber = requests.get('http://127.0.0.1:5000/blocknumber').json()
+blocknumber = requests.get('http://127.0.0.1:5000/latestBlock').json()
 print(f'Response : {blocknumber}')
 
 # Balance of account
